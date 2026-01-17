@@ -34,7 +34,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: Props) {
-  const id = (await params).id;
+  let id = (await params).id;
   const res = await fetch(
     'https://gi.yatta.moe/api/v2/pt/avatar',
     { cache: 'force-cache' }
@@ -43,7 +43,24 @@ export default async function Page({ params }: Props) {
   const json = await res.json()
   const items: CharacterItems = json.data.items
 
-  const slug = normalize(id)
+  const slug = normalize(id = (() => {
+  switch (id) {
+    case 'traveler-pyro':
+      return 'pyro-traveler-boy'
+    case 'hydro-traveler-boy':
+      return 'traveler-hydro'
+    case 'traveler-dendro':
+      return 'dendro-traveler-boy'
+    case 'electro-traveler-boy':
+      return 'traveler-electro'
+    case 'anemo-traveler-boy':
+      return 'traveler-anemo'
+    case 'geo-traveler-boy':
+      return 'traveler-geo'
+    default:
+      return id
+  }
+})())
 
   const character = Object.values(items).find((char) => {
     return (
