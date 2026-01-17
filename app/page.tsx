@@ -1,65 +1,82 @@
-import Image from "next/image";
+import Image from "next/image"
+import {characters} from "./data/characters"
+import Link from "next/link";
+
+
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    function formatarNome(nome:string) {
+        return nome
+          .split('-')
+          .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
+          .join('_');
+      }
+      function formatarNomeComEspaco(nome: string) {
+        return nome
+          .split('_')
+          .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
+          .join(' ');
+      }
+      function formatCharacterName(name: string) {
+       
+        if (name === 'Traveler Hydro' ||
+            name === 'Traveler Dendro' ||
+            name === 'Traveler Anemo' ||
+            name === 'Traveler Geo' ||
+            name === 'Traveler Electro' ||
+            name === 'Traveler Pyro') {
+            return 'Viajante';
+          }
+          if (name === 'Raiden Shogun') {
+            return 'Raiden';
+          }
+          if (name === 'Arataki Itto') {
+            return 'Itto';
+          }
+          if (name === 'Kamisato Ayaka') {
+            return 'Ayaka';
+          }
+          if (name === 'Kamisato Ayato') {
+            return 'Ayato';
+          }
+          if (name === 'Yumemizuki Mizuki') {
+            return 'Mizuki';
+          }
+          if (name === 'Kujou Sara') {
+            return 'Sara';
+          }
+          if (name === 'Shikanoin Heizou') {
+            return 'Heizou';
+          }
+          if (name === 'Sangonomiya Kokomi') {
+            return 'Kokomi';
+          }
+          if (name === 'Kaedehara Kazuha') {
+            return 'Kazuha';
+          }
+          if (name === 'Kuki Shinobu') {
+            return 'Kuki';
+          }
+        return name;
+      }
+    return (
+        <main id="main-index" className="iii"> 
+            <div id="main-characters-flex">
+            {characters.map((char:any,i:any)=> (
+                <Link href={`/${char.name}`} key={i} className={`character-card ${char.elementType} ${char.name.replace(/-/g, '').replace(/traveler/gi, "viajante")} ${char.weapon} rarity-${char.rarity}`}><Image width={100} height={100} src={`https://genshinbuild.com/images/Team-Icons/${formatarNome(char.name)}.png`} alt={formatarNomeComEspaco(formatarNome(char.name))} className={`rarity-${char.rarity} char-img`} loading="eager" priority/>
+                  <div className={`rara-${char.elementType}`}></div>
+                   <div className="elel">
+                    <Image width={100} height={100} src={`https://genshinbuild.com/images/${char.weapon}.webp`} alt="" />
+                  </div>
+                  <div className="count">
+                      <Image width={100} height={100} src={`https://genshinbuild.com/images/tier-${char.rank}.svg`} alt="" />
+                  </div>
+            
+            <p>{formatCharacterName(formatarNomeComEspaco(formatarNome(char.name)))}</p>
+            {char.newCharacter != null ? <span>{char.newCharacter}</span> : ''  }
+            {char.soonCharacter != null ? <span style={{backgroundColor:'#02c2b2', left:'calc(-30px * var(--minimize))'}}>{char.soonCharacter}</span> : ''  }
+            </Link>
+            
+        ))}</div></main>
+    )
 }

@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 type Props = {
   params: {
     id: string
@@ -81,10 +83,21 @@ export default async function Page({ params }: Props) {
 
   const characterData = await characterRes.json()
 
-  return (
-    <div>
-      <h1>{characterData.data.name}</h1>
-      <p>{characterData.data.fetter.title}</p>
-    </div>
-  )
+  return <>
+    <main className="animate-fadein">
+      <section className="grid grid-cols-2 h-120 border-[#0066FF] border-2 rounded-3xl relative ">
+        <div className="absolute top-2 left-2 bg-pink-500 rounded-xl p-2">
+          <Image width={20} height={20} src="/share-sharing-icon-29.png" className="invert-100 fill-green-700" alt=""/>
+        </div>
+        <div className="absolute bg-linear-to-r from-[#3E8BFF] to-[#0066FF] w-full h-30 top-13">
+
+        </div>
+        <Image
+        fetchPriority="high"
+        loading={"lazy"}
+        className="absolute min-w-135 bottom-0 -right-22 animate-translate"
+        width={1000} height={613} src={'https://fastcdn.hoyoverse.com/content-v2/hk4e/124105/22609467819303b436883092635ae97a_5002591570143526700.png'} alt=""/>
+      </section>
+    </main>
+  </>
 }
