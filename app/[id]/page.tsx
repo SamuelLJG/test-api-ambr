@@ -19,10 +19,9 @@ export default async function Page({
   )
 
   const character = await res.json()
-console.log(character.data.fetter.title)
   return (
     <ul>
-      <li>{}</li>
+      <li>{character.data.fetter.title}</li>
     </ul>
   )
 }
