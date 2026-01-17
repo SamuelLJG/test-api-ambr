@@ -1,5 +1,7 @@
 type Props = {
-  params: Promise<{ id: string }>
+  params: {
+    id: string
+  }
 }
 
 type CharacterItems = Record<
@@ -10,6 +12,7 @@ type CharacterItems = Record<
     route: string
   }
 >
+
 function normalize(str: string) {
   return str
     .toLowerCase()
@@ -17,6 +20,23 @@ function normalize(str: string) {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, '-')
 }
+
+/**
+ * Normaliza casos especiais do Traveler
+ */
+function normalizeTraveler(slug: string) {
+  const match = slug.match(/^([a-z]+)-traveler-(boy|girl)$/)
+
+  if (match) {
+    return `traveler-${match[1]}`
+  }
+
+  return slug
+}
+
+/**
+ * 🔹 Obrigatório para output: export
+ */
 export async function generateStaticParams() {
   const res = await fetch(
     'https://gi.yatta.moe/api/v2/pt/avatar',
@@ -24,17 +44,19 @@ export async function generateStaticParams() {
   )
 
   const json = await res.json()
-
   const items: CharacterItems = json.data.items
 
   return Object.values(items).map((char) => ({
-    slug: normalize(char.route || char.name)
+    id: normalizeTraveler(
+      normalize(char.route || char.name)
+    )
   }))
-  
 }
 
 export default async function Page({ params }: Props) {
-  let id = (await params).id;
+  const id = (await params).id;
+  const slug = normalizeTraveler(normalize(id))
+
   const res = await fetch(
     'https://gi.yatta.moe/api/v2/pt/avatar',
     { cache: 'force-cache' }
@@ -43,31 +65,10 @@ export default async function Page({ params }: Props) {
   const json = await res.json()
   const items: CharacterItems = json.data.items
 
-  const slug = normalize(id = (() => {
-  switch (id) {
-    case 'traveler-pyro':
-      return 'pyro-traveler-boy'
-    case 'hydro-traveler-boy':
-      return 'traveler-hydro'
-    case 'traveler-dendro':
-      return 'dendro-traveler-boy'
-    case 'electro-traveler-boy':
-      return 'traveler-electro'
-    case 'anemo-traveler-boy':
-      return 'traveler-anemo'
-    case 'geo-traveler-boy':
-      return 'traveler-geo'
-    default:
-      return id
-  }
-})())
-
-  const character = Object.values(items).find((char) => {
-    return (
-      normalize(char.route) === slug ||
-      normalize(char.name) === slug
-    )
-  })
+  const character = Object.values(items).find((char) =>
+    normalizeTraveler(normalize(char.route)) === slug ||
+    normalizeTraveler(normalize(char.name)) === slug
+  )
 
   if (!character) {
     throw new Error('Personagem não encontrado')
