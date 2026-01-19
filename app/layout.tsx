@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "./style.css"
 import Header from "./components/Header";
 
 const inter = Inter({
@@ -20,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-[#CEE1FF] p-5`}>
+      <body className={`${inter.className} bg-[#CEE1FF] p-10 tracking-[-0.09rem]`}>
         <Header/>
         {children}
       </body>

@@ -11,6 +11,7 @@
             opacity: 1;
         }
     }
+
     --animate-translate:translate 500ms ease-out;
 
     @keyframes translate {
@@ -18,7 +19,7 @@
             right: -288px;
         }
         100% {
-            right: -88px;
+            right: ' ';
         }
     }
 }
